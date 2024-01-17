@@ -38,7 +38,11 @@
       "plugin:prettier/recommended"
     ],
     "parserOptions": {
-      "parser": "@babel/eslint-parser"
+      "parser": "@babel/eslint-parser",
+      "extends": [
+        "plugin:vue/essential"
+      ],
+      "requireConfigFile": false
     },
     "rules": {}
   },
