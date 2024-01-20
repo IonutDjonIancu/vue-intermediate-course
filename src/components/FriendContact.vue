@@ -1,13 +1,14 @@
 <template>
   <div>
-    <li>
-      <h4>{{ friend.name }}</h4>
-      <button @click="toggleDetails">Show details</button>
-      <ul>
-        <li>Phone: {{ friend.phone }}</li>
-        <li>Email: {{ friend.email }}</li>
-      </ul>
-    </li>
+    <h4>{{ friend.name }} {{ friend.isFavorite ? "(*)" : "" }}</h4>
+    <button @click="toggleDetails">
+      {{ detailsAreVisible ? "Colapse" : "Expand" }}
+    </button>
+    <button @click="toggleFavorite">Favorite</button>
+    <ul v-if="detailsAreVisible">
+      <li>Phone: {{ friend.phone }}</li>
+      <li>Email: {{ friend.email }}</li>
+    </ul>
   </div>
 </template>
 
@@ -20,11 +21,20 @@ export default {
     };
   },
   props: {
-    friend: Object,
+    friend: {
+      id: String,
+      name: String,
+      phone: String,
+      email: String,
+      isFavorite: Boolean,
+    },
   },
   methods: {
     toggleDetails() {
       this.detailsAreVisible = !this.detailsAreVisible;
+    },
+    toggleFavorite() {
+      this.$emit("toggle-favorite", this.friend.id);
     },
   },
 };

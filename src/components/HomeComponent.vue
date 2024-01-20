@@ -1,23 +1,37 @@
 <template>
   <div>
     <h4>My friends</h4>
-    <ul>
-      <FriendContact
-        :key="friend.id"
-        v-for="friend in friends"
-        v-bind:friend="friend"
-      ></FriendContact>
-    </ul>
+    <AddFriend @add-friend="addFriend"></AddFriend>
+    <FriendContact
+      :key="frnd.id"
+      v-for="frnd in friends"
+      :friend="frnd"
+      @toggle-favorite="markFriendAsFavorite"
+    ></FriendContact>
   </div>
 </template>
 
 <script>
 import FriendContact from "./FriendContact.vue";
+import AddFriend from "./AddFriend.vue";
 export default {
   name: "HomeComponent",
   components: {
     FriendContact,
+    AddFriend,
   },
+  methods: {
+    markFriendAsFavorite(friendId) {
+      let friend = this.friends.find((f) => f.id === friendId);
+      friend.isFavorite = !friend.isFavorite;
+    },
+    addFriend(friend) {
+      friend.id = this.friends.length + 1;
+
+      this.friends.push(friend);
+    },
+  },
+  emits: ["toggle-favorite"],
   data() {
     return {
       friends: [
@@ -26,12 +40,14 @@ export default {
           name: "Mark",
           phone: "1234 5678 90",
           email: "manuel@gmail.com",
+          isFavorite: true,
         },
         {
           id: 2,
           name: "Jane",
           phone: "1234 5678 91",
           email: "jane@gmail.com",
+          isFavorite: false,
         },
       ],
     };
